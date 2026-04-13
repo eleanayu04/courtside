@@ -1,6 +1,10 @@
 [app]
 name = "courtside"
 
-[services]
+[services.web]
+type = "web"
+port = 3000
+ingress = "public"
+path = "."
 
 [environments]
