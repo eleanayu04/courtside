@@ -1,0 +1,8 @@
+[app]
+name = "courtside"
+
+[service]
+name = "web"
+type = "web"
+port = 3000
+ingress = "public"
