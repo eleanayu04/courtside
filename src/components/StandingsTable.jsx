@@ -7,9 +7,7 @@ export default function StandingsTable({ standings }) {
             <th className="text-left py-3 px-4 w-12">#</th>
             <th className="text-left py-3">Team</th>
             <th className="text-center py-3 px-2">Record</th>
-            <th className="text-center py-3 px-2 hidden sm:table-cell">Conf</th>
-            <th className="text-center py-3 px-2 hidden sm:table-cell">Points</th>
-            <th className="text-center py-3 px-4">Streak</th>
+            <th className="text-center py-3 px-4">ITA Points</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-white/5">
@@ -26,17 +24,7 @@ export default function StandingsTable({ standings }) {
                 </div>
               </td>
               <td className="text-center py-3 px-2 font-mono font-semibold">{row.team.record}</td>
-              <td className="text-center py-3 px-2 font-mono text-gray-400 hidden sm:table-cell">{row.confRecord}</td>
-              <td className="text-center py-3 px-2 font-mono text-gray-400 hidden sm:table-cell">{row.points}</td>
-              <td className="text-center py-3 px-4">
-                <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${
-                  row.streak.startsWith('W')
-                    ? 'bg-green-500/20 text-green-400'
-                    : 'bg-red-500/20 text-red-400'
-                }`}>
-                  {row.streak}
-                </span>
-              </td>
+              <td className="text-center py-3 px-4 font-mono text-gray-400">{row.points.toFixed(3)}</td>
             </tr>
           ))}
         </tbody>

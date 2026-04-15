@@ -6,8 +6,8 @@ export default function Live() {
     <div>
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-2xl font-extrabold">Live Matches</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{liveMatches.length} matches in progress</p>
+          <h1 className="text-2xl font-extrabold">Today's Matches</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Apr 15, 2026 — {liveMatches.length} D1 Men's matches</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-400">
           <span className="w-2 h-2 bg-court-live rounded-full animate-pulse-live" />
