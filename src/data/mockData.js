@@ -35,49 +35,21 @@ function findTeam(name) {
   return teamsByName[name] || { name, rank: null, record: '', logo: '🎾', conference: '' }
 }
 
-// Today's scheduled matches (April 15, 2026) — shown as "live" for display
+// Today's matches (April 15, 2026) — statuses based on collegetennisranks.com
+// status: 'live' = in progress, 'scheduled' = not started, 'final' = completed
 export const liveMatches = [
-  {
-    id: 'live-1',
-    status: 'live',
-    round: 'SEC Regular Season',
-    court: 'Main Court',
-    startTime: '7:00 PM ET',
-    homeTeam: findTeam('Vanderbilt'),
-    awayTeam: { name: 'Alabama', rank: 50, record: '12-16', logo: '🐘', conference: 'SEC' },
-    teamScore: { home: 0, away: 0 },
-    doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
-  },
   {
     id: 'live-2',
     status: 'live',
     round: 'SEC Regular Season',
     court: 'Main Court',
     startTime: '11:00 AM ET',
+    statsUrl: 'https://stats.statbroadcast.com/broadcast/?id=658012',
     homeTeam: { name: 'Tennessee', rank: 56, record: '10-17', logo: '🍊', conference: 'SEC' },
     awayTeam: findTeam('Ole Miss'),
-    teamScore: { home: 0, away: 0 },
+    teamScore: { home: 0, away: 1 },
     doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
-  },
-  {
-    id: 'live-3',
-    status: 'live',
-    round: 'SEC Regular Season',
-    court: 'Main Court',
-    startTime: '3:00 PM ET',
-    homeTeam: { name: 'Kentucky', rank: 26, record: '16-12', logo: '🐱', conference: 'SEC' },
-    awayTeam: { name: 'Arkansas', rank: 36, record: '16-13', logo: '🐗', conference: 'SEC' },
-    teamScore: { home: 0, away: 0 },
-    doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
+    singlesMatches: [],
   },
   {
     id: 'live-4',
@@ -89,9 +61,7 @@ export const liveMatches = [
     awayTeam: { name: 'Duke', rank: 45, record: '13-12', logo: '😈', conference: 'ACC' },
     teamScore: { home: 0, away: 0 },
     doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
+    singlesMatches: [],
   },
   {
     id: 'live-5',
@@ -103,9 +73,7 @@ export const liveMatches = [
     awayTeam: { name: 'North Carolina', rank: 46, record: '13-10', logo: '🐏', conference: 'ACC' },
     teamScore: { home: 0, away: 0 },
     doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
+    singlesMatches: [],
   },
   {
     id: 'live-6',
@@ -117,9 +85,7 @@ export const liveMatches = [
     awayTeam: { name: 'Georgia Tech', rank: 57, record: '12-12', logo: '🐝', conference: 'ACC' },
     teamScore: { home: 0, away: 0 },
     doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
+    singlesMatches: [],
   },
   {
     id: 'live-7',
@@ -131,10 +97,37 @@ export const liveMatches = [
     awayTeam: { name: 'Louisville', rank: 62, record: '17-12', logo: '🔴', conference: 'ACC' },
     teamScore: { home: 0, away: 0 },
     doublesResults: [],
-    singlesMatches: [
-      { court: 1, home: 'TBD', away: 'TBD', sets: [], serving: null, status: 'scheduled', currentGame: null },
-    ],
+    singlesMatches: [],
   },
+  {
+    id: 'live-3',
+    status: 'scheduled',
+    round: 'SEC Regular Season',
+    court: 'Main Court',
+    startTime: '3:00 PM ET',
+    homeTeam: { name: 'Kentucky', rank: 26, record: '16-12', logo: '🐱', conference: 'SEC' },
+    awayTeam: { name: 'Arkansas', rank: 36, record: '16-13', logo: '🐗', conference: 'SEC' },
+    teamScore: { home: 0, away: 0 },
+    doublesResults: [],
+    singlesMatches: [],
+  },
+  {
+    id: 'live-1',
+    status: 'scheduled',
+    round: 'SEC Regular Season',
+    court: 'Main Court',
+    startTime: '7:00 PM ET',
+    homeTeam: findTeam('Vanderbilt'),
+    awayTeam: { name: 'Alabama', rank: 50, record: '12-16', logo: '🐘', conference: 'SEC' },
+    teamScore: { home: 0, away: 0 },
+    doublesResults: [],
+    singlesMatches: [],
+  },
+]
+
+// Completed matches today
+export const todayResults = [
+  { id: 'today-1', date: 'Apr 15, 2026', round: 'Non-Conference', homeTeam: { name: 'North Florida', rank: null, record: '', logo: '🐦', conference: 'ASUN' }, awayTeam: { name: 'Austin Peay', rank: null, record: '', logo: '🔴', conference: 'ASUN' }, teamScore: { home: 4, away: 0 }, winner: 'home' },
 ]
 
 // Recent results sourced from collegetennisranks.com week-behind (ranked matches)
