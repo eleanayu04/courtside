@@ -22,7 +22,7 @@ export default function MatchDetail() {
     )
   }
 
-  const { homeTeam, awayTeam, teamScore, round, singlesMatches, doublesResults, startTime } = match
+  const { homeTeam, awayTeam, teamScore, round, singlesMatches = [], doublesResults = [], startTime, date } = match
 
   return (
     <div>
@@ -35,7 +35,7 @@ export default function MatchDetail() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">{round}</span>
-            <span className="text-xs text-gray-500 ml-3">{startTime}</span>
+            <span className="text-xs text-gray-500 ml-3">{startTime || date}</span>
           </div>
           {match.status === 'live'
             ? <span className="flex items-center gap-1.5 text-xs font-bold text-court-live"><span className="w-2 h-2 bg-court-live rounded-full animate-pulse-live" />LIVE</span>
@@ -90,6 +90,11 @@ export default function MatchDetail() {
       )}
 
       {/* Singles */}
+      {singlesMatches.length === 0 && doublesResults.length === 0 ? (
+        <div className="bg-court-card rounded-xl border border-white/5 p-6 text-center text-gray-500 text-sm">
+          No individual court data available for this match.
+        </div>
+      ) : singlesMatches.length > 0 && (
       <div className="bg-court-card rounded-xl border border-white/5 p-4">
         <h3 className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Singles</h3>
         <div className="space-y-1">
@@ -153,6 +158,7 @@ export default function MatchDetail() {
           ))}
         </div>
       </div>
+      )}
     </div>
   )
 }
