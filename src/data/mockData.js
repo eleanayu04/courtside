@@ -39,67 +39,6 @@ function findTeam(name) {
 // status: 'live' = in progress, 'scheduled' = not started, 'final' = completed
 export const liveMatches = [
   {
-    id: 'live-2',
-    status: 'live',
-    round: 'SEC Regular Season',
-    court: 'Main Court',
-    startTime: '11:00 AM ET',
-    statsUrl: 'https://stats.statbroadcast.com/broadcast/?id=658012',
-    homeTeam: { name: 'Tennessee', rank: 56, record: '10-17', logo: '🍊', conference: 'SEC' },
-    awayTeam: findTeam('Ole Miss'),
-    teamScore: { home: 0, away: 1 },
-    doublesResults: [],
-    singlesMatches: [],
-  },
-  {
-    id: 'live-4',
-    status: 'live',
-    round: 'ACC Regular Season',
-    court: 'Main Court',
-    startTime: '10:00 AM ET',
-    homeTeam: { name: 'Boston College', rank: null, record: '', logo: '🦅', conference: 'ACC' },
-    awayTeam: { name: 'Duke', rank: 45, record: '13-12', logo: '😈', conference: 'ACC' },
-    teamScore: { home: 0, away: 0 },
-    doublesResults: [],
-    singlesMatches: [],
-  },
-  {
-    id: 'live-5',
-    status: 'live',
-    round: 'ACC Regular Season',
-    court: 'Main Court',
-    startTime: '12:30 PM ET',
-    homeTeam: { name: 'Virginia Tech', rank: null, record: '', logo: '🦃', conference: 'ACC' },
-    awayTeam: { name: 'North Carolina', rank: 46, record: '13-10', logo: '🐏', conference: 'ACC' },
-    teamScore: { home: 0, away: 0 },
-    doublesResults: [],
-    singlesMatches: [],
-  },
-  {
-    id: 'live-6',
-    status: 'live',
-    round: 'ACC Regular Season',
-    court: 'Main Court',
-    startTime: '12:30 PM ET',
-    homeTeam: { name: 'California', rank: 47, record: '14-12', logo: '🐻', conference: 'ACC' },
-    awayTeam: { name: 'Georgia Tech', rank: 57, record: '12-12', logo: '🐝', conference: 'ACC' },
-    teamScore: { home: 0, away: 0 },
-    doublesResults: [],
-    singlesMatches: [],
-  },
-  {
-    id: 'live-7',
-    status: 'live',
-    round: 'ACC Regular Season',
-    court: 'Main Court',
-    startTime: '10:00 AM ET',
-    homeTeam: { name: 'Florida State', rank: 60, record: '12-14', logo: '🔶', conference: 'ACC' },
-    awayTeam: { name: 'Louisville', rank: 62, record: '17-12', logo: '🔴', conference: 'ACC' },
-    teamScore: { home: 0, away: 0 },
-    doublesResults: [],
-    singlesMatches: [],
-  },
-  {
     id: 'live-3',
     status: 'scheduled',
     round: 'SEC Regular Season',
@@ -125,8 +64,13 @@ export const liveMatches = [
   },
 ]
 
-// Completed matches today
+// Completed matches today — sourced from StatBroadcast (SEC) and IonCourt (ACC)
 export const todayResults = [
+  { id: 'today-2', date: 'Apr 15, 2026', round: 'SEC Regular Season', homeTeam: { name: 'Tennessee', rank: 56, record: '10-17', logo: '🍊', conference: 'SEC' }, awayTeam: findTeam('Ole Miss'), teamScore: { home: 0, away: 4 }, winner: 'away' },
+  { id: 'today-4', date: 'Apr 15, 2026', round: 'ACC Championship', homeTeam: { name: 'Boston College', rank: null, record: '', logo: '🦅', conference: 'ACC' }, awayTeam: { name: 'Duke', rank: 45, record: '13-12', logo: '😈', conference: 'ACC' }, teamScore: { home: 0, away: 4 }, winner: 'away' },
+  { id: 'today-5', date: 'Apr 15, 2026', round: 'ACC Championship', homeTeam: { name: 'Virginia Tech', rank: null, record: '', logo: '🦃', conference: 'ACC' }, awayTeam: { name: 'North Carolina', rank: 46, record: '13-10', logo: '🐏', conference: 'ACC' }, teamScore: { home: 0, away: 4 }, winner: 'away' },
+  { id: 'today-6', date: 'Apr 15, 2026', round: 'ACC Championship', homeTeam: { name: 'California', rank: 47, record: '14-12', logo: '🐻', conference: 'ACC' }, awayTeam: { name: 'Georgia Tech', rank: 57, record: '12-12', logo: '🐝', conference: 'ACC' }, teamScore: { home: 4, away: 0 }, winner: 'home' },
+  { id: 'today-7', date: 'Apr 15, 2026', round: 'ACC Championship', homeTeam: { name: 'Florida State', rank: 60, record: '12-14', logo: '🔶', conference: 'ACC' }, awayTeam: { name: 'Louisville', rank: 62, record: '17-12', logo: '🔴', conference: 'ACC' }, teamScore: { home: 1, away: 4 }, winner: 'away' },
   { id: 'today-1', date: 'Apr 15, 2026', round: 'Non-Conference', homeTeam: { name: 'North Florida', rank: null, record: '', logo: '🐦', conference: 'ASUN' }, awayTeam: { name: 'Austin Peay', rank: null, record: '', logo: '🔴', conference: 'ASUN' }, teamScore: { home: 4, away: 0 }, winner: 'home' },
 ]
 
