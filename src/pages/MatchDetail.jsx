@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { liveMatches } from '../data/mockData'
+import { liveMatches, todayResults, recentResults } from '../data/mockData'
 
 function CourtStatus({ status }) {
   if (status === 'live') return <span className="flex items-center gap-1 text-xs font-bold text-court-live"><span className="w-1.5 h-1.5 bg-court-live rounded-full animate-pulse-live" />LIVE</span>
@@ -10,7 +10,8 @@ function CourtStatus({ status }) {
 
 export default function MatchDetail() {
   const { id } = useParams()
-  const match = liveMatches.find((m) => m.id === id)
+  const allMatches = [...liveMatches, ...todayResults, ...recentResults]
+  const match = allMatches.find((m) => m.id === id)
 
   if (!match) {
     return (
@@ -25,8 +26,8 @@ export default function MatchDetail() {
 
   return (
     <div>
-      <Link to="/" className="text-sm text-gray-400 hover:text-white mb-4 inline-flex items-center gap-1">
-        ← Back to Live
+      <Link to={-1} className="text-sm text-gray-400 hover:text-white mb-4 inline-flex items-center gap-1">
+        ← Back
       </Link>
 
       {/* Match header */}
@@ -36,10 +37,10 @@ export default function MatchDetail() {
             <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">{round}</span>
             <span className="text-xs text-gray-500 ml-3">{startTime}</span>
           </div>
-          <span className="flex items-center gap-1.5 text-xs font-bold text-court-live">
-            <span className="w-2 h-2 bg-court-live rounded-full animate-pulse-live" />
-            LIVE
-          </span>
+          {match.status === 'live'
+            ? <span className="flex items-center gap-1.5 text-xs font-bold text-court-live"><span className="w-2 h-2 bg-court-live rounded-full animate-pulse-live" />LIVE</span>
+            : <span className="text-xs font-bold text-gray-400">FINAL</span>
+          }
         </div>
 
         <div className="flex items-center justify-around">
