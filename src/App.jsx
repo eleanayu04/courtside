@@ -4,6 +4,9 @@ import Live from './pages/Live'
 import Results from './pages/Results'
 import Rankings from './pages/Rankings'
 import MatchDetail from './pages/MatchDetail'
+import Women from './pages/Women'
+import WomenResults from './pages/WomenResults'
+import WomenRankings from './pages/WomenRankings'
 
 export default function App() {
   return (
@@ -15,6 +18,9 @@ export default function App() {
           <Route path="/results" element={<Results />} />
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/match/:id" element={<MatchDetail />} />
+          <Route path="/women" element={<Women />} />
+          <Route path="/women/results" element={<WomenResults />} />
+          <Route path="/women/rankings" element={<WomenRankings />} />
         </Routes>
       </main>
       <footer className="text-center py-6 text-xs text-gray-600 border-t border-white/5">
