@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom'
 
 export default function ResultCard({ result }) {
-  const { homeTeam, awayTeam, teamScore, round, date, winner } = result
+  const { homeTeam, awayTeam, teamScore, round, date, winner, resultsUrl } = result
 
-  return (
-    <Link to={`/match/${result.id}`} className="block">
+  const card = (
     <div className="bg-court-card rounded-xl border border-white/5 overflow-hidden hover:border-court-accent/30 transition-all hover:shadow-lg hover:shadow-court-accent/5">
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
         <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">{round}</span>
@@ -47,6 +46,10 @@ export default function ResultCard({ result }) {
         </div>
       </div>
     </div>
-    </Link>
   )
+
+  if (resultsUrl) {
+    return <a href={resultsUrl} target="_blank" rel="noopener noreferrer" className="block">{card}</a>
+  }
+  return <Link to={`/match/${result.id}`} className="block">{card}</Link>
 }
