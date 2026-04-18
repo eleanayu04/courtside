@@ -1,10 +1,19 @@
 [app]
 name = "courtside"
 
+[postgres]
+tier = "basic"
+
 [services.web]
 type = "web"
 port = 3000
 ingress = "public"
 path = "."
+migrate_command = "node db/migrate.js"
+
+[cron.update-scores]
+schedule = "0 * * * *"
+command = "node scripts/scrape.js"
+service = "web"
 
 [environments]

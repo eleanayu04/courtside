@@ -1,10 +1,20 @@
-import { womenRecentResults } from '../data/womenData'
+import { useApi } from '../hooks/useApi'
+import { normalizeMatch } from '../utils/normalizeMatch'
 import ResultCard from '../components/ResultCard'
+import { Spinner, ErrorMsg } from '../components/LoadingState'
 
 export default function WomenResults() {
-  const grouped = womenRecentResults.reduce((acc, result) => {
-    if (!acc[result.date]) acc[result.date] = []
-    acc[result.date].push(result)
+  const { data: rows, loading, error } = useApi('/api/matches?gender=women&view=recent')
+
+  if (loading) return <Spinner />
+  if (error) return <ErrorMsg message={error} />
+
+  const matches = (rows || []).map(normalizeMatch)
+
+  const grouped = matches.reduce((acc, m) => {
+    const key = m.date || 'Unknown'
+    if (!acc[key]) acc[key] = []
+    acc[key].push(m)
     return acc
   }, {})
 
@@ -19,12 +29,16 @@ export default function WomenResults() {
         <div key={date} className="mb-6">
           <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">{date}</h2>
           <div className="grid gap-3 md:grid-cols-2">
-            {results.map((result) => (
-              <ResultCard key={result.id} result={result} />
-            ))}
+            {results.map(r => <ResultCard key={r.id} result={r} />)}
           </div>
         </div>
       ))}
+
+      {matches.length === 0 && (
+        <div className="text-center py-20 text-gray-500">
+          <p>No recent results found</p>
+        </div>
+      )}
     </div>
   )
 }

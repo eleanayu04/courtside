@@ -1,28 +1,28 @@
 import { useParams, Link } from 'react-router-dom'
-import { liveMatches, todayResults, recentResults } from '../data/mockData'
-
-function CourtStatus({ status }) {
-  if (status === 'live') return <span className="flex items-center gap-1 text-xs font-bold text-court-live"><span className="w-1.5 h-1.5 bg-court-live rounded-full animate-pulse-live" />LIVE</span>
-  if (status === 'final') return <span className="text-xs font-bold text-gray-400">FINAL</span>
-  if (status === 'warmup') return <span className="text-xs font-bold text-court-gold">WARM-UP</span>
-  return null
-}
+import { useApi } from '../hooks/useApi'
+import { normalizeMatch } from '../utils/normalizeMatch'
+import { Spinner, ErrorMsg } from '../components/LoadingState'
 
 export default function MatchDetail() {
   const { id } = useParams()
-  const allMatches = [...liveMatches, ...todayResults, ...recentResults]
-  const match = allMatches.find((m) => m.id === id)
+  const { data: row, loading, error } = useApi(`/api/matches/${id}`)
 
-  if (!match) {
+  if (loading) return <Spinner />
+  if (error) return <ErrorMsg message={error} />
+
+  if (!row) {
     return (
       <div className="text-center py-20">
         <p className="text-gray-400">Match not found</p>
-        <Link to="/" className="text-court-accent text-sm mt-2 inline-block">Back to live</Link>
+        <Link to="/" className="text-court-accent text-sm mt-2 inline-block">← Back to live</Link>
       </div>
     )
   }
 
-  const { homeTeam, awayTeam, teamScore, round, singlesMatches = [], doublesResults = [], startTime, date } = match
+  const match = normalizeMatch(row)
+  const { homeTeam, awayTeam, teamScore, round, startTime, date } = match
+  const isLive = match.status === 'live'
+  const isFinal = match.status === 'final'
 
   return (
     <div>
@@ -37,9 +37,11 @@ export default function MatchDetail() {
             <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">{round}</span>
             <span className="text-xs text-gray-500 ml-3">{startTime || date}</span>
           </div>
-          {match.status === 'live'
+          {isLive
             ? <span className="flex items-center gap-1.5 text-xs font-bold text-court-live"><span className="w-2 h-2 bg-court-live rounded-full animate-pulse-live" />LIVE</span>
-            : <span className="text-xs font-bold text-gray-400">FINAL</span>
+            : isFinal
+              ? <span className="text-xs font-bold text-gray-400">FINAL</span>
+              : <span className="text-xs font-bold text-court-gold">UPCOMING</span>
           }
         </div>
 
@@ -47,7 +49,9 @@ export default function MatchDetail() {
           <div className="text-center">
             <span className="text-4xl block mb-2">{homeTeam.logo}</span>
             <div className="font-extrabold text-lg">{homeTeam.name}</div>
-            <div className="text-xs text-gray-500">#{homeTeam.rank} · {homeTeam.record}</div>
+            <div className="text-xs text-gray-500">
+              {homeTeam.rank ? `#${homeTeam.rank} · ` : ''}{homeTeam.record}
+            </div>
           </div>
           <div className="text-center">
             <div className="flex items-center gap-4">
@@ -64,100 +68,45 @@ export default function MatchDetail() {
           <div className="text-center">
             <span className="text-4xl block mb-2">{awayTeam.logo}</span>
             <div className="font-extrabold text-lg">{awayTeam.name}</div>
-            <div className="text-xs text-gray-500">#{awayTeam.rank} · {awayTeam.record}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Doubles */}
-      {doublesResults.length > 0 && (
-        <div className="bg-court-card rounded-xl border border-white/5 p-4 mb-4">
-          <h3 className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Doubles</h3>
-          <div className="space-y-2">
-            {doublesResults.map((d, i) => (
-              <div key={i} className="flex items-center justify-between text-sm py-1.5 border-b border-white/5 last:border-0">
-                <div className="flex-1">
-                  <span className={d.winner === 'home' ? 'font-bold' : 'text-gray-400'}>{d.home}</span>
-                </div>
-                <span className="text-xs font-mono text-gray-400 px-3">{d.score}</span>
-                <div className="flex-1 text-right">
-                  <span className={d.winner === 'away' ? 'font-bold' : 'text-gray-400'}>{d.away}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Singles */}
-      {singlesMatches.length === 0 && doublesResults.length === 0 ? (
-        <div className="bg-court-card rounded-xl border border-white/5 p-6 text-center text-gray-500 text-sm">
-          No individual court data available for this match.
-        </div>
-      ) : singlesMatches.length > 0 && (
-      <div className="bg-court-card rounded-xl border border-white/5 p-4">
-        <h3 className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Singles</h3>
-        <div className="space-y-1">
-          {singlesMatches.map((m, i) => (
-            <div key={i} className={`rounded-lg p-3 ${m.status === 'live' ? 'bg-white/5' : ''}`}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-500 font-medium">Court {m.court}</span>
-                <CourtStatus status={m.status} />
-              </div>
-              <div className="space-y-1">
-                {/* Home player */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {m.serving === 'home' && <span className="text-[10px] text-court-gold animate-serve">●</span>}
-                    <span className={`text-sm ${m.winner === 'home' ? 'font-bold' : ''} ${m.winner === 'away' ? 'text-gray-500' : ''}`}>
-                      {m.home}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    {m.sets.map((s, j) => (
-                      <span key={j} className={`w-7 text-center text-sm font-mono font-bold ${
-                        s.home > s.away ? 'text-white' : 'text-gray-500'
-                      }`}>
-                        {s.home}
-                      </span>
-                    ))}
-                    {m.status === 'live' && m.currentGame && (
-                      <span className="w-8 text-center text-sm font-mono font-bold text-court-gold bg-court-gold/10 rounded">
-                        {m.currentGame.home}
-                      </span>
-                    )}
-                    {m.winner === 'home' && <span className="text-court-gold text-xs font-bold ml-1">W</span>}
-                  </div>
-                </div>
-                {/* Away player */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {m.serving === 'away' && <span className="text-[10px] text-court-gold animate-serve">●</span>}
-                    <span className={`text-sm ${m.winner === 'away' ? 'font-bold' : ''} ${m.winner === 'home' ? 'text-gray-500' : ''}`}>
-                      {m.away}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    {m.sets.map((s, j) => (
-                      <span key={j} className={`w-7 text-center text-sm font-mono font-bold ${
-                        s.away > s.home ? 'text-white' : 'text-gray-500'
-                      }`}>
-                        {s.away}
-                      </span>
-                    ))}
-                    {m.status === 'live' && m.currentGame && (
-                      <span className="w-8 text-center text-sm font-mono font-bold text-court-gold bg-court-gold/10 rounded">
-                        {m.currentGame.away}
-                      </span>
-                    )}
-                    {m.winner === 'away' && <span className="text-court-gold text-xs font-bold ml-1">W</span>}
-                  </div>
-                </div>
-              </div>
+            <div className="text-xs text-gray-500">
+              {awayTeam.rank ? `#${awayTeam.rank} · ` : ''}{awayTeam.record}
             </div>
-          ))}
+          </div>
         </div>
       </div>
+
+      {/* Action links */}
+      <div className="flex gap-3">
+        {match.resultsUrl && (
+          <a
+            href={match.resultsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-court-card border border-white/10 hover:border-court-accent rounded-xl p-4 text-center transition-colors group"
+          >
+            <div className="text-lg mb-1">📋</div>
+            <div className="text-sm font-semibold group-hover:text-court-accent transition-colors">Official Results</div>
+            <div className="text-xs text-gray-500 mt-0.5">Full match recap</div>
+          </a>
+        )}
+        {match.statsUrl && (
+          <a
+            href={match.statsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-court-card border border-white/10 hover:border-court-accent rounded-xl p-4 text-center transition-colors group"
+          >
+            <div className="text-lg mb-1">📊</div>
+            <div className="text-sm font-semibold group-hover:text-court-accent transition-colors">Live Stats</div>
+            <div className="text-xs text-gray-500 mt-0.5">Court-by-court scores</div>
+          </a>
+        )}
+      </div>
+
+      {!match.resultsUrl && !match.statsUrl && isFinal && (
+        <div className="bg-court-card rounded-xl border border-white/5 p-6 text-center text-gray-500 text-sm">
+          No recap link available for this match.
+        </div>
       )}
     </div>
   )

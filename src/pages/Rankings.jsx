@@ -1,7 +1,16 @@
-import { standings } from '../data/mockData'
+import { useApi } from '../hooks/useApi'
+import { normalizeRanking } from '../utils/normalizeMatch'
 import StandingsTable from '../components/StandingsTable'
+import { Spinner, ErrorMsg } from '../components/LoadingState'
 
 export default function Rankings() {
+  const { data: rows, loading, error } = useApi('/api/rankings?gender=men')
+
+  if (loading) return <Spinner />
+  if (error) return <ErrorMsg message={error} />
+
+  const standings = (rows || []).map(normalizeRanking)
+
   return (
     <div>
       <div className="mb-5">
